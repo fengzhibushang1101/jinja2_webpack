@@ -7,7 +7,7 @@
   "rules": {
     "semi": ["error", "always"],
     "quotes": "off",
-    "no-console":"off",
+    "no-console": 1,
     "no-unused-vars":"off",
     "no-unreachable":"off",
     "no-redeclare":"warn"

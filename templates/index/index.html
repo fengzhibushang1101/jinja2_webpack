@@ -1,6 +1,11 @@
 {% extends "../layout/layout.html" %}
-
+{% block css %}
+<link href="{{ static_url("css/index/index.css") }}" rel="stylesheet">
+{% end %}
 {% block boo %}
 <h1>index</h1>
 <h2>{{ name }}</h2>
 {% end %}
+{% block javascript %}
+<script src="{{ static_url('js/index/index.js') }}"></script>
+{% end%}
