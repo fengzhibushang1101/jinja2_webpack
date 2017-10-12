@@ -41,7 +41,7 @@ urls = [
 ]
 
 
-options.define('port', default=9901, type=int)
+options.define('port', default=9801, type=int)
 
 
 def main():
@@ -62,7 +62,6 @@ def main():
         logger.error(traceback.format_exc(e))
 
 if __name__ == '__main__':
-    print "the server is going to start..."
-    print "http://localhost:9901/"
+    print "http://localhost:9801/"
     logger.info("the server is going to start...")
     main()

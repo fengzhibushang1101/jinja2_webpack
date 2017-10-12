@@ -7,6 +7,7 @@ const webpack = require('webpack');
  有了它就可以将你的样式提取到单独的css文件里，
  妈妈再也不用担心样式会被打包到js文件里了。
  */
+const markdown = require('nunjucks-markdown');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 /*
  html-webpack-plugin插件，重中之重，webpack中生成HTML的插件，
@@ -23,6 +24,16 @@ module.exports = {
     module: {
         loaders: [ //加载器，关于各个加载器的参数配置，可自行搜索之。
             {
+                // jinja/nunjucks templates
+                test: /\.html/,
+                loader: 'jinja-loader',
+                // query: {
+                //     root: "./templates",
+                //     config: function(env) {
+                //         markdown.register(env);
+                //     }
+                // }
+            }, {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract([
                     {
@@ -35,7 +46,7 @@ module.exports = {
                 ]),
             },{
                 test: /\.js$/,
-                exclude: /node_modules|vendor|bootstrap/,
+                exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
                     presets: [['es2015', { loose: true }]],
@@ -72,60 +83,69 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendors', // 将公共模块提取，生成名为`vendors`的chunk
-            chunks: ['index','list','about'], //提取哪些模块共有的部分
+            // chunks: ['index','list','about'], //提取哪些模块共有的部分
             minChunks: 3 // 提取至少3个模块共有的部分
         }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'common', // 将公共模块提取，生成名为`vendors`的chunk
-            chunks: ['index','list'], //提取哪些模块共有的部分
-            minChunks: 2 // 提取至少3个模块共有的部分
-        }),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'common', // 将公共模块提取，生成名为`vendors`的chunk
+        //     chunks: ['index','list'], //提取哪些模块共有的部分
+        //     minChunks: 2 // 提取至少3个模块共有的部分
+        // }),
         new ExtractTextPlugin('css/[name].css'), //单独使用link标签加载css并设置路径，相对于output配置中的publickPath
-        //HtmlWebpackPlugin，模板生成相关的配置，每个对于一个页面的配置，有几个写几个
+        // HtmlWebpackPlugin，模板生成相关的配置，每个对于一个页面的配置，有几个写几个
         new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
-            favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
             filename: './view/index.html', //生成的html存放路径，相对于path
-            template: './src/view/index.html', //html模板路径
+            template: 'dev.static/js/index/index/html.js', //html模板路径
             inject: 'body', //js插入的位置，true/'head'/'body'/false
             hash: true, //为静态资源生成hash值
-            chunks: ['common', 'vendors', 'index'],//需要引入的chunk，不配置就会引入所有页面的资源
             minify: { //压缩HTML文件
                 removeComments: true, //移除HTML中的注释
                 collapseWhitespace: false //删除空白符与换行符
             }
         }),
-        new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
-            favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
-            filename: './view/list.html', //生成的html存放路径，相对于path
-            template: './src/view/list.html', //html模板路径
-            inject: true, //js插入的位置，true/'head'/'body'/false
-            hash: true, //为静态资源生成hash值
-            chunks: ['common', 'vendors', 'list'],//需要引入的chunk，不配置就会引入所有页面的资源
-            minify: { //压缩HTML文件
-                removeComments: true, //移除HTML中的注释
-                collapseWhitespace: false //删除空白符与换行符
-            }
-        }),
-        new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
-            favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
-            filename: './view/about.html', //生成的html存放路径，相对于path
-            template: './src/view/about.html', //html模板路径
-            inject: true, //js插入的位置，true/'head'/'body'/false
-            hash: true, //为静态资源生成hash值
-            chunks: ['about', 'vendors'],//需要引入的chunk，不配置就会引入所有页面的资源
-            minify: { //压缩HTML文件
-                removeComments: true, //移除HTML中的注释
-                collapseWhitespace: false //删除空白符与换行符
-            }
-        }),
-        new webpack.HotModuleReplacementPlugin(), //热加载
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-            },
-        })
+        // new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
+        //     favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
+        //     filename: './view/index.html', //生成的html存放路径，相对于path
+        //     template: './src/view/index.html', //html模板路径
+        //     inject: 'body', //js插入的位置，true/'head'/'body'/false
+        //     hash: true, //为静态资源生成hash值
+        //     chunks: ['common', 'vendors', 'index'],//需要引入的chunk，不配置就会引入所有页面的资源
+        //     minify: { //压缩HTML文件
+        //         removeComments: true, //移除HTML中的注释
+        //         collapseWhitespace: false //删除空白符与换行符
+        //     }
+        // }),
+        // new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
+        //     filename: './template/index.html', //生成的html存放路径，相对于path
+        //     template: './templates/index/index.html', //html模板路径
+        //     inject: true, //js插入的位置，true/'head'/'body'/false
+        //     hash: true, //为静态资源生成hash值
+        //     chunks: ['index'],//需要引入的chunk，不配置就会引入所有页面的资源
+        //     minify: { //压缩HTML文件
+        //         removeComments: true, //移除HTML中的注释
+        //         collapseWhitespace: false //删除空白符与换行符
+        //     }
+        // }),
+        // new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
+        //     favicon: './src/img/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
+        //     filename: './view/about.html', //生成的html存放路径，相对于path
+        //     template: './src/view/about.html', //html模板路径
+        //     inject: true, //js插入的位置，true/'head'/'body'/false
+        //     hash: true, //为静态资源生成hash值
+        //     chunks: ['about', 'vendors'],//需要引入的chunk，不配置就会引入所有页面的资源
+        //     minify: { //压缩HTML文件
+        //         removeComments: true, //移除HTML中的注释
+        //         collapseWhitespace: false //删除空白符与换行符
+        //     }
+        // }),
+        // new webpack.HotModuleReplacementPlugin(), //热加载
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false,
+        //     },
+        // })
     ],
-    //使用webpack-dev-server，提高开发效率
+    //webpack-dev-server配置，基本上不会使用
     devServer: {
         contentBase: './',
         host: 'localhost',
