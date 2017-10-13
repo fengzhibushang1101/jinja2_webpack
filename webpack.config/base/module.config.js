@@ -10,5 +10,4 @@ let options = {
     sync: true // 这里不能异步，只能同步
 };
 let globInstance = new glob.Glob("!(_)*", options);
-console.log(globInstance.found);
 module.exports = globInstance.found;
