@@ -21,10 +21,6 @@ from views.index import IndexHandler
 
 if 'threading' in sys.modules:
     del sys.modules['threading']
-import gevent
-import gevent.monkey
-import gevent.socket
-gevent.monkey.patch_all()
 
 from tornado import ioloop, web, options, httpserver
 from lib.utils.logger_util import logger

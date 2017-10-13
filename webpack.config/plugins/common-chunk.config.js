@@ -33,5 +33,4 @@ modules.forEach(function(module){
         })
     );
 });
-console.log(commons);
 module.exports = commons;

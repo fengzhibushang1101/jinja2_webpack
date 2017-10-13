@@ -7,5 +7,7 @@
 <h2>{{ name }}</h2>
 {% end %}
 {% block javascript %}
+<script src="{{ static_url('js/vendors.js') }}"></script>
+<script src="{{ static_url('js/index/common.js') }}"></script>
 <script src="{{ static_url('js/index/index.js') }}"></script>
 {% end %}
