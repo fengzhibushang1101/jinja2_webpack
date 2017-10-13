@@ -14,9 +14,9 @@ const webpack = require('webpack');
 module.exports = [
     new ExtractTextPlugin('css/[name].css'), //单独使用link标签加载css并设置路径，相对于output配置中的publickPath
     new webpack.HotModuleReplacementPlugin(), //热加载
-    new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: false,
-        },
-    })
+    // new webpack.optimize.UglifyJsPlugin({
+    //     compress: {
+    //         warnings: false,
+    //     },
+    // })
 ]
