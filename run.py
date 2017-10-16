@@ -18,6 +18,7 @@ import sys
 import traceback
 
 from views.index import IndexHandler
+from views.testHandler import TestHandler
 
 if 'threading' in sys.modules:
     del sys.modules['threading']
@@ -34,10 +35,11 @@ SETTINGS = dict(
 
 urls = [
     (r'/', IndexHandler),
+    (r'/test', TestHandler)
 ]
 
 
-options.define('port', default=9801, type=int)
+options.define('port', default=9999, type=int)
 
 
 def main():
@@ -58,6 +60,6 @@ def main():
         logger.error(traceback.format_exc(e))
 
 if __name__ == '__main__':
-    print "http://localhost:9801/"
+    print "http://localhost:9999/"
     logger.info("the server is going to start...")
     main()
